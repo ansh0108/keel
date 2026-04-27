@@ -1,5 +1,5 @@
 {
-  "name": "@keel/cli",
+  "name": "keelcode",
   "version": "0.1.0",
   "type": "module",
   "bin": {
@@ -16,10 +16,10 @@
     "ui-dist"
   ],
   "dependencies": {
-    "@keel/core": "workspace:*",
-    "@keel/recorder": "workspace:*",
-    "@keel/analyzer": "workspace:*",
-    "@keel/server": "workspace:*",
+    "@keelcode/core": "workspace:*",
+    "@keelcode/recorder": "workspace:*",
+    "@keelcode/analyzer": "workspace:*",
+    "@keelcode/server": "workspace:*",
     "commander": "^12.0.0"
   }
 }

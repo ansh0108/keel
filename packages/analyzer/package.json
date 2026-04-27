@@ -1,5 +1,5 @@
 {
-  "name": "@keel/analyzer",
+  "name": "@keelcode/analyzer",
   "version": "0.1.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -17,7 +17,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@keel/core": "workspace:*",
+    "@keelcode/core": "workspace:*",
     "ts-morph": "^21.0.0"
   }
 }

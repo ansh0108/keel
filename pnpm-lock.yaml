@@ -17,7 +17,7 @@ importers:
 
   packages/analyzer:
     dependencies:
-      '@keel/core':
+      '@keelcode/core':
         specifier: workspace:*
         version: link:../core
       ts-morph:
@@ -26,16 +26,16 @@ importers:
 
   packages/cli:
     dependencies:
-      '@keel/analyzer':
+      '@keelcode/analyzer':
         specifier: workspace:*
         version: link:../analyzer
-      '@keel/core':
+      '@keelcode/core':
         specifier: workspace:*
         version: link:../core
-      '@keel/recorder':
+      '@keelcode/recorder':
         specifier: workspace:*
         version: link:../recorder
-      '@keel/server':
+      '@keelcode/server':
         specifier: workspace:*
         version: link:../server
       commander:
@@ -57,7 +57,7 @@ importers:
 
   packages/recorder:
     dependencies:
-      '@keel/core':
+      '@keelcode/core':
         specifier: workspace:*
         version: link:../core
       zod:
@@ -69,13 +69,13 @@ importers:
       '@hono/node-server':
         specifier: ^1.11.0
         version: 1.19.14(hono@4.12.14)
-      '@keel/analyzer':
+      '@keelcode/analyzer':
         specifier: file:../analyzer
         version: file:packages/analyzer
-      '@keel/core':
+      '@keelcode/core':
         specifier: workspace:*
         version: link:../core
-      '@keel/recorder':
+      '@keelcode/recorder':
         specifier: workspace:*
         version: link:../recorder
       hono:
@@ -355,7 +355,7 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@keel/analyzer@file:packages/analyzer':
+  '@keelcode/analyzer@file:packages/analyzer':
     resolution: {directory: packages/analyzer, type: directory}
 
   '@nodelib/fs.scandir@2.1.5':
@@ -1219,9 +1219,9 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@keel/analyzer@file:packages/analyzer':
+  '@keelcode/analyzer@file:packages/analyzer':
     dependencies:
-      '@keel/core': link:packages/core
+      '@keelcode/core': link:packages/core
       ts-morph: 21.0.1
 
   '@nodelib/fs.scandir@2.1.5':

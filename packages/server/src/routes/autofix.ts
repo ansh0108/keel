@@ -3,7 +3,7 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs'
 import { z } from 'zod'
 import type { AppEnv } from '../index.js'
 import { getSessionById, getNodesBySession, getMetricsForNode } from '../db/queries.js'
-import { analyzeFiles } from '@keel/analyzer'
+import { analyzeFiles } from '@keelcode/analyzer'
 import { randomUUID } from 'node:crypto'
 
 export const autofixRouter = new Hono<AppEnv>()

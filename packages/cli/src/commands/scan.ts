@@ -1,9 +1,9 @@
 import { join } from 'node:path'
 import { randomUUID } from 'node:crypto'
-import { createDbClient } from '@keel/core'
-import { analyzeFiles } from '@keel/analyzer'
+import { createDbClient } from '@keelcode/core'
+import { analyzeFiles } from '@keelcode/analyzer'
 import { walkProjectFiles } from '../lib/project-files.js'
-import type { QualityMetrics } from '@keel/core'
+import type { QualityMetrics } from '@keelcode/core'
 
 const BASELINE_BRANCH = 'baseline'
 

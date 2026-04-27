@@ -1,5 +1,5 @@
 import type { SourceFile } from 'ts-morph'
-import type { ArchViolation } from '@keel/core'
+import type { ArchViolation } from '@keelcode/core'
 
 const TODO_PATTERN = /\b(TODO|FIXME|HACK|XXX|BUG|TEMP|NOCOMMIT)\b/i
 

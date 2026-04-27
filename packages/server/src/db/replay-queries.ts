@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto'
-import type { DbClient } from '@keel/core'
+import type { DbClient } from '@keelcode/core'
 
 export interface ReplayInput {
   sessionId: string

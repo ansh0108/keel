@@ -1,5 +1,5 @@
 import { SourceFile } from 'ts-morph'
-import type { ArchViolation } from '@keel/core'
+import type { ArchViolation } from '@keelcode/core'
 
 // Heuristic: detect when a single file imports from 3+ distinct concern layers
 const UI_IMPORTS = ['react', 'jsx', 'tsx', 'styled', '@emotion', 'tailwind']

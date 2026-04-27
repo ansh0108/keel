@@ -1,4 +1,4 @@
-import type { DbClient } from '@keel/core'
+import type { DbClient } from '@keelcode/core'
 
 export function getAllSessions(db: DbClient) {
   return db.prepare('SELECT * FROM sessions ORDER BY started_at DESC').all() as Record<string, unknown>[]

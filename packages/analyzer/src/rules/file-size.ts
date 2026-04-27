@@ -1,4 +1,4 @@
-import type { ArchViolation } from '@keel/core'
+import type { ArchViolation } from '@keelcode/core'
 
 const LINE_LIMIT = 300
 

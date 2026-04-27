@@ -1,7 +1,7 @@
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { existsSync } from 'node:fs'
-import { startServer } from '@keel/server'
+import { startServer } from '@keelcode/server'
 
 const DEFAULT_PORT = 2701
 

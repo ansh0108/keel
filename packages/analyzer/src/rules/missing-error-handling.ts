@@ -1,5 +1,5 @@
 import type { SourceFile } from 'ts-morph'
-import type { ArchViolation } from '@keel/core'
+import type { ArchViolation } from '@keelcode/core'
 import { SyntaxKind } from 'ts-morph'
 
 export function checkMissingErrorHandling(sourceFile: SourceFile, projectRoot?: string): ArchViolation[] {

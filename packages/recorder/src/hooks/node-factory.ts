@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto'
 import { countLines } from '../parsers/file-utils.js'
-import type { ExecutionNode, FileChange, NodeType } from '@keel/core'
+import type { ExecutionNode, FileChange, NodeType } from '@keelcode/core'
 import type { HookEvent, WriteEvent, EditEvent, BashEvent } from '../parsers/hook-event.js'
 
 export function buildNodeFromEvent(

@@ -19,14 +19,10 @@ No CI, no cloud, no accounts. Everything runs locally.
 
 ## Installation
 
-Requires Node 22+, pnpm, and [Claude Code](https://claude.ai/code).
+Requires Node 18+, and [Claude Code](https://claude.ai/code).
 
 ```bash
-git clone https://github.com/ansh0108/keel
-cd keel
-pnpm install
-pnpm build
-cd packages/cli && npm link
+npm install -g keelcode
 ```
 
 ---

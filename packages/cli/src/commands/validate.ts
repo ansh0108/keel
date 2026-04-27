@@ -1,7 +1,7 @@
 import { join } from 'node:path'
 import { existsSync } from 'node:fs'
-import { createDbClient } from '@keel/core'
-import { loadActiveSession } from '@keel/recorder'
+import { createDbClient } from '@keelcode/core'
+import { loadActiveSession } from '@keelcode/recorder'
 import {
   getBranchForSession,
   getForkScore,

@@ -1,4 +1,4 @@
-import type { ArchViolation } from '@keel/core'
+import type { ArchViolation } from '@keelcode/core'
 
 const PENALTY: Record<string, number> = {
   file_too_large: 15,

@@ -1,5 +1,5 @@
 import { join } from 'node:path'
-import { createDbClient } from '@keel/core'
+import { createDbClient } from '@keelcode/core'
 import {
   parseHookEvent,
   loadActiveSession,
@@ -7,8 +7,8 @@ import {
   createActiveSession,
   advanceSession,
   buildNodeFromEvent,
-} from '@keel/recorder'
-import { analyzeFiles } from '@keel/analyzer'
+} from '@keelcode/recorder'
+import { analyzeFiles } from '@keelcode/analyzer'
 
 export async function runRecord(projectRoot: string): Promise<void> {
   const raw = await readStdin()

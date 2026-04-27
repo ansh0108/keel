@@ -1,5 +1,5 @@
 {
-  "name": "@keel/server",
+  "name": "@keelcode/server",
   "version": "0.1.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -11,11 +11,11 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@keel/core": "workspace:*",
+    "@keelcode/core": "workspace:*",
     "@hono/node-server": "^1.11.0",
     "hono": "^4.3.0",
     "zod": "^3.22.0",
-    "@keel/recorder": "workspace:*",
-    "@keel/analyzer": "file:../analyzer"
+    "@keelcode/recorder": "workspace:*",
+    "@keelcode/analyzer": "file:../analyzer"
   }
 }

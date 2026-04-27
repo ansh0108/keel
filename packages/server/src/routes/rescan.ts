@@ -3,7 +3,7 @@ import { randomUUID } from 'node:crypto'
 import { readdirSync, statSync } from 'node:fs'
 import { join, extname } from 'node:path'
 import type { AppEnv } from '../index.js'
-import { analyzeFiles } from '@keel/analyzer'
+import { analyzeFiles } from '@keelcode/analyzer'
 
 export const rescanRouter = new Hono<AppEnv>()
 

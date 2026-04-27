@@ -11,7 +11,7 @@ import { checkTodoComments } from '../rules/todo-comments.js'
 import { checkMissingErrorHandling } from '../rules/missing-error-handling.js'
 import { checkGodComponent } from '../rules/god-component.js'
 import { computeScore } from './score.js'
-import type { FileMetrics, QualityMetrics } from '@keel/core'
+import type { FileMetrics, QualityMetrics } from '@keelcode/core'
 
 export function analyzeFiles(
   nodeId: string,
