@@ -105,9 +105,16 @@ Data is stored in `.keel/keel.db` (SQLite, local to each project, gitignored).
 
 ## Requirements
 
-- Node 24+ (uses `node:sqlite` built-in)
-- pnpm
-- Claude Code CLI
+- Node 18+
+- [Claude Code](https://claude.ai/code)
+
+## Contributing
+
+```bash
+git clone https://github.com/ansh0108/keel
+cd keel
+pnpm install && pnpm build
+```
 
 ---
 
