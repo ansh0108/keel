@@ -18,7 +18,7 @@ export function runUi(projectRoot: string): void {
 }
 
 function resolveUiDist(): string {
-  // When installed as a package, UI dist is bundled alongside
   const here = dirname(fileURLToPath(import.meta.url))
-  return join(here, '..', '..', '..', 'ui', 'dist')
+  // Installed: packages/cli/dist/commands/ui.js → ../../ui-dist
+  return join(here, '..', '..', 'ui-dist')
 }

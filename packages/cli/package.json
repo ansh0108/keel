@@ -6,11 +6,15 @@
     "keel": "./dist/bin.js"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json && cp -r ../ui/dist ./ui-dist",
     "dev": "tsc -p tsconfig.json --watch",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist ui-dist"
   },
+  "files": [
+    "dist",
+    "ui-dist"
+  ],
   "dependencies": {
     "@keel/core": "workspace:*",
     "@keel/recorder": "workspace:*",
