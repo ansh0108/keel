@@ -22,7 +22,7 @@ No CI, no cloud, no accounts. Everything runs locally.
 Requires Node 18+, and [Claude Code](https://claude.ai/code).
 
 ```bash
-npm install -g keelcode
+npm install -g @ansh0108/keelcode
 ```
 
 ---
