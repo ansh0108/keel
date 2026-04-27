@@ -1,13 +1,13 @@
-import { DatabaseSync } from 'node:sqlite'
+import Database, { type Database as DatabaseType } from 'better-sqlite3'
 import { mkdirSync } from 'node:fs'
 import { dirname } from 'node:path'
 
-export type DbClient = ReturnType<typeof createDbClient>
+export type DbClient = DatabaseType
 
-export function createDbClient(dbPath: string) {
+export function createDbClient(dbPath: string): DatabaseType {
   mkdirSync(dirname(dbPath), { recursive: true })
 
-  const db = new DatabaseSync(dbPath)
+  const db = new Database(dbPath)
   db.exec('PRAGMA journal_mode = WAL')
   db.exec('PRAGMA foreign_keys = ON')
   db.exec(CREATE_TABLES_SQL)

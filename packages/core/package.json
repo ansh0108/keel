@@ -17,6 +17,10 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
+    "better-sqlite3": "^12.9.0",
     "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13"
   }
 }
