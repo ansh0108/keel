@@ -1,7 +1,8 @@
-import { join, dirname } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { join } from 'node:path'
 import { existsSync } from 'node:fs'
 import { startServer } from '@keelcode/server'
+
+declare const __dirname: string
 
 const DEFAULT_PORT = 2701
 
@@ -13,12 +14,6 @@ export function runUi(projectRoot: string): void {
     process.exit(1)
   }
 
-  const uiDistPath = resolveUiDist()
+  const uiDistPath = join(__dirname, '..', 'ui-dist')
   startServer(dbPath, uiDistPath, DEFAULT_PORT, projectRoot)
-}
-
-function resolveUiDist(): string {
-  const here = dirname(fileURLToPath(import.meta.url))
-  // Installed: packages/cli/dist/commands/ui.js → ../../ui-dist
-  return join(here, '..', '..', 'ui-dist')
 }
