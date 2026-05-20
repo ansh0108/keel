@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { c, scoreColor, severityColor } from '../../styles/tokens.js'
+import { estimateTokens, formatTokenCostLine } from '../../utils/tokenCost.js'
 import { ReplayPanel } from './ReplayPanel.js'
 import { api } from '../../lib/api.js'
 import type { GraphNode, ArchViolation } from '../../lib/types.js'
@@ -85,6 +86,15 @@ export function NodeDetail({ node, sessionId, fileDiff, onRescan, onDiffDismiss 
   const folder = filePath.split('/').slice(-3, -1).join('/')
   const lineCount = filesAnalyzed[0]?.lineCount ?? file?.lineCountAfter
   const importCount = filesAnalyzed[0]?.dependencyCount
+
+  // Approximate input tokens from line count (~12 tokens/line for code); count output
+  // tokens from the actual analysis result JSON using tiktoken cl100k_base.
+  const tokenCostLine = useMemo(() => {
+    if (score === null || node.metrics === null) return null
+    const inputTokens = (lineCount ?? 100) * 12
+    const outputTokens = estimateTokens(JSON.stringify(node.metrics))
+    return formatTokenCostLine(inputTokens, outputTokens)
+  }, [node, score, lineCount])
 
   async function handleAutoFix(idx: number, violation: ArchViolation) {
     setFixStates((s) => ({ ...s, [idx]: 'loading' }))
@@ -181,6 +191,11 @@ export function NodeDetail({ node, sessionId, fileDiff, onRescan, onDiffDismiss 
                 <div style={{ fontFamily: c.fontMono, fontSize: 46, fontWeight: 700, color: sc, letterSpacing: '-0.05em', lineHeight: 1 }}>{score}</div>
               )}
               <div style={{ fontSize: 11, color: c.textMuted, textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: 4 }}>/ 100</div>
+              {tokenCostLine && (
+                <div style={{ fontSize: '0.8em', color: c.textMuted, opacity: 0.6, marginTop: 6, fontFamily: c.fontMono, letterSpacing: '0.01em' }}>
+                  {tokenCostLine}
+                </div>
+              )}
             </div>
           )}
         </div>

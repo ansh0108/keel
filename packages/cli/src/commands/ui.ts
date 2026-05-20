@@ -6,7 +6,7 @@ declare const __dirname: string
 
 const DEFAULT_PORT = 2701
 
-export function runUi(projectRoot: string): void {
+export function runUi(projectRoot: string, port: number = DEFAULT_PORT): void {
   const dbPath = join(projectRoot, '.keel', 'keel.db')
 
   if (!existsSync(dbPath)) {
@@ -15,5 +15,5 @@ export function runUi(projectRoot: string): void {
   }
 
   const uiDistPath = join(__dirname, '..', 'ui-dist')
-  startServer(dbPath, uiDistPath, DEFAULT_PORT, projectRoot)
+  startServer(dbPath, uiDistPath, port, projectRoot)
 }

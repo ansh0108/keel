@@ -27,7 +27,11 @@ program
 program
   .command('ui [path]')
   .description('Open the Keel execution graph UI')
-  .action((path?: string) => runUi(path ? resolve(path) : cwd))
+  .option('-p, --port <number>', 'Port to run the UI on', '2701')
+  .action((path?: string, opts?: { port?: string }) => {
+    const port = parseInt(opts?.port ?? '2701', 10)
+    runUi(path ? resolve(path) : cwd, port)
+  })
 
 program
   .command('validate [path]')
