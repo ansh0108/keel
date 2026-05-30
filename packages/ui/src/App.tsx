@@ -5,6 +5,8 @@ import { SessionList } from './components/panels/SessionList.js'
 import { ExecutionGraph } from './components/graph/ExecutionGraph.js'
 import { ScanView } from './components/scan/ScanView.js'
 import { NodeDetail } from './components/panels/NodeDetail.js'
+import { ReportCardView } from './components/insights/ReportCardView.js'
+import { RegressionsView } from './components/insights/RegressionsView.js'
 import { isScanSession, computeScanStats } from './lib/graph-utils.js'
 import { c, globalStyles } from './styles/tokens.js'
 import type { GraphNode, ArchViolation } from './lib/types.js'
@@ -18,11 +20,14 @@ function violationKey(v: ArchViolation) {
   return `${v.type}|${v.file}|${v.line ?? ''}|${v.message}`
 }
 
+type MainView = 'overview' | 'report' | 'regressions'
+
 export function App() {
   const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null)
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null)
   const [fileDiff, setFileDiff] = useState<FileDiff | null>(null)
   const [scanScoreBefore, setScanScoreBefore] = useState<number | null>(null)
+  const [mainView, setMainView] = useState<MainView>('overview')
 
   // Before-snapshot of nodes + which file path we were viewing when rescan was triggered
   const beforeSnapshotRef = useRef<GraphNode[] | null>(null)
@@ -160,7 +165,7 @@ export function App() {
                 : <SessionList
                     sessions={sessionsState.sessions}
                     selectedId={selectedSessionId}
-                    onSelect={(id) => { setSelectedSessionId(id); setSelectedNodeId(null); setFileDiff(null); setScanScoreBefore(null) }}
+                    onSelect={(id) => { setSelectedSessionId(id); setSelectedNodeId(null); setFileDiff(null); setScanScoreBefore(null); setMainView('overview') }}
                     onRefresh={sessionsState.reload}
                     refreshing={false}
                   />
@@ -192,9 +197,21 @@ export function App() {
             </div>
           )}
           {graphState.status === 'success' && (
-            isScanSession(graphState.data.nodes)
-              ? <ScanView nodes={graphState.data.nodes} selectedNodeId={selectedNodeId} onNodeClick={setSelectedNodeId} onRescan={handleScanRescan} scoreBefore={scanScoreBefore} />
-              : <ExecutionGraph nodes={graphState.data.nodes} selectedNodeId={selectedNodeId} onNodeClick={setSelectedNodeId} />
+            <>
+              <ViewTabs
+                active={mainView}
+                onChange={(v) => { setMainView(v); if (v !== 'overview') setSelectedNodeId(null) }}
+              />
+              <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
+                {mainView === 'overview' && (
+                  isScanSession(graphState.data.nodes)
+                    ? <ScanView nodes={graphState.data.nodes} selectedNodeId={selectedNodeId} onNodeClick={setSelectedNodeId} onRescan={handleScanRescan} scoreBefore={scanScoreBefore} />
+                    : <ExecutionGraph nodes={graphState.data.nodes} selectedNodeId={selectedNodeId} onNodeClick={setSelectedNodeId} />
+                )}
+                {mainView === 'report' && <ReportCardView sessionId={selectedSessionId!} />}
+                {mainView === 'regressions' && <RegressionsView sessionId={selectedSessionId!} />}
+              </div>
+            </>
           )}
         </main>
 
@@ -242,6 +259,61 @@ export function App() {
       </div>
 
     </>
+  )
+}
+
+const VIEW_TABS: { id: MainView; label: string }[] = [
+  { id: 'overview', label: 'Overview' },
+  { id: 'report', label: 'Report Card' },
+  { id: 'regressions', label: 'Regressions' },
+]
+
+function ViewTabs({ active, onChange }: { active: MainView; onChange: (v: MainView) => void }) {
+  return (
+    <div style={{
+      display: 'flex',
+      gap: 4,
+      padding: '12px 24px 0',
+      borderBottom: `1px solid ${c.border}`,
+      flexShrink: 0,
+    }}>
+      {VIEW_TABS.map((tab) => {
+        const isActive = tab.id === active
+        return (
+          <button
+            key={tab.id}
+            onClick={() => onChange(tab.id)}
+            style={{
+              position: 'relative',
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              fontFamily: c.fontSans,
+              fontSize: 13,
+              fontWeight: isActive ? 600 : 500,
+              color: isActive ? c.text : c.textMuted,
+              padding: '8px 14px 12px',
+              transition: 'color 130ms',
+            }}
+            onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.color = c.textSub }}
+            onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.color = c.textMuted }}
+          >
+            {tab.label}
+            {isActive && (
+              <span style={{
+                position: 'absolute',
+                left: 8,
+                right: 8,
+                bottom: -1,
+                height: 2,
+                borderRadius: 2,
+                background: c.accent,
+              }} />
+            )}
+          </button>
+        )
+      })}
+    </div>
   )
 }
 

@@ -6,6 +6,10 @@ import { runRecord } from './commands/record.js'
 import { runUi } from './commands/ui.js'
 import { runValidate } from './commands/validate.js'
 import { runScan } from './commands/scan.js'
+import { runMcp } from './commands/mcp.js'
+import { runBlame } from './commands/blame.js'
+import { runReport } from './commands/report.js'
+import { runJudge } from './commands/judge.js'
 
 const cwd = process.cwd()
 
@@ -42,5 +46,25 @@ program
   .command('scan [path]')
   .description('Scan a project directory (defaults to current directory)')
   .action((path?: string) => runScan(path ? resolve(path) : cwd))
+
+program
+  .command('mcp [path]')
+  .description('Run Keel as an MCP server (stdio) for live code review in Claude Code')
+  .action((path?: string) => runMcp(path ? resolve(path) : cwd))
+
+program
+  .command('blame [filter]')
+  .description('Show quality regressions and which edits caused them (optionally filter by file)')
+  .action((filter?: string) => runBlame(cwd, filter))
+
+program
+  .command('report [session]')
+  .description('Print an agent report card for a session (defaults to the latest)')
+  .action((session?: string) => runReport(cwd, session))
+
+program
+  .command('judge <file>')
+  .description('Semantic LLM review of a file (naming, logic, comments, security)')
+  .action((file: string) => runJudge(cwd, file))
 
 program.parse()

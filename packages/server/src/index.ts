@@ -7,6 +7,7 @@ import { sessionsRouter } from './routes/sessions.js'
 import { replayRouter } from './routes/replay.js'
 import { autofixRouter } from './routes/autofix.js'
 import { rescanRouter } from './routes/rescan.js'
+import { insightsRouter } from './routes/insights.js'
 
 export type AppEnv = {
   Variables: {
@@ -30,6 +31,7 @@ export function startServer(dbPath: string, uiDistPath: string, port: number, pr
   app.route('/api/sessions', sessionsRouter)
   app.route('/api/sessions', replayRouter)
   app.route('/api/sessions', autofixRouter)
+  app.route('/api/sessions', insightsRouter)
   app.route('/api', rescanRouter)
 
   app.use('*', serveStatic({ root: uiDistPath }))

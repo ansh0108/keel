@@ -1,6 +1,6 @@
 {
   "name": "@ansh0108/keelcode",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "bin": {
     "keel": "dist/bin.js"
   },
@@ -22,7 +22,9 @@
     "@keelcode/core": "workspace:*",
     "@keelcode/recorder": "workspace:*",
     "@keelcode/server": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.29.0",
     "commander": "^12.0.0",
-    "esbuild": "^0.28.0"
+    "esbuild": "^0.28.0",
+    "zod": "^3.25.76"
   }
 }

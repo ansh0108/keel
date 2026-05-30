@@ -25,8 +25,10 @@ interface ClaudeSettings {
 export function runInit(projectRoot: string): void {
   ensureKeelDir(projectRoot)
   injectClaudeHooks(projectRoot)
+  ensureMcpServer(projectRoot)
   ensureClaudeMdInclude(projectRoot)
   console.log('Keel initialized. Sessions will be recorded automatically.')
+  console.log('Restart Claude Code to load the Keel MCP server (live code review).')
   console.log('Run `keel ui` to inspect execution graphs.')
 }
 
@@ -75,6 +77,44 @@ function addStopHook(existing: StopHook[]): StopHook[] {
       description: 'Keel: validate replay constraints and promote to CLAUDE.md',
     },
   ]
+}
+
+interface McpServerEntry {
+  command: string
+  args?: string[]
+}
+
+interface McpConfig {
+  mcpServers?: Record<string, McpServerEntry>
+}
+
+// Register the Keel MCP server in .mcp.json so Claude Code exposes live code
+// review tools (keel_review_file, keel_scan_project, ...) during sessions.
+function ensureMcpServer(projectRoot: string): void {
+  const mcpPath = join(projectRoot, '.mcp.json')
+  const config = loadMcpConfig(mcpPath)
+
+  if (config.mcpServers?.keel) return
+
+  const updated: McpConfig = {
+    ...config,
+    mcpServers: {
+      ...config.mcpServers,
+      keel: { command: 'keel', args: ['mcp'] },
+    },
+  }
+
+  writeFileSync(mcpPath, JSON.stringify(updated, null, 2), 'utf-8')
+  console.log(`MCP server registered in ${mcpPath}`)
+}
+
+function loadMcpConfig(path: string): McpConfig {
+  if (!existsSync(path)) return {}
+  try {
+    return JSON.parse(readFileSync(path, 'utf-8')) as McpConfig
+  } catch {
+    return {}
+  }
 }
 
 // Add @.keel/constraints.md to CLAUDE.md so Claude reads active constraints

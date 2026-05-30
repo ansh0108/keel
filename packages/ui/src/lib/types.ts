@@ -65,3 +65,69 @@ export interface SessionGraph {
   nodes: GraphNode[]
   branches: Branch[]
 }
+
+// ── Insights: report card (#5) + regression attribution (#4) ──
+
+export interface ViolationTally {
+  type: string
+  count: number
+}
+
+export interface FileScore {
+  path: string
+  score: number
+}
+
+export interface RegressionEvent {
+  path: string
+  nodeId: string
+  nodeType: string
+  timestamp: number
+  fromScore: number
+  toScore: number
+  delta: number
+  introducedViolations: ArchViolation[]
+  resolvedViolations: ArchViolation[]
+}
+
+export interface ScorePoint {
+  nodeId: string
+  timestamp: number
+  score: number
+  violationCount: number
+}
+
+export interface FileTimeline {
+  path: string
+  points: ScorePoint[]
+  firstScore: number
+  currentScore: number
+  bestScore: number
+  worstScore: number
+  regressions: RegressionEvent[]
+}
+
+export interface ReportCard {
+  grade: string
+  startScore: number | null
+  endScore: number | null
+  netDelta: number
+  avgScore: number
+  filesTouched: number
+  nodesAnalyzed: number
+  totalViolations: number
+  violationsByType: ViolationTally[]
+  introducedCount: number
+  resolvedCount: number
+  hallucinatedImports: number
+  orphanedExports: number
+  regressions: RegressionEvent[]
+  cleanFiles: number
+  worstFiles: FileScore[]
+  verdict: string
+}
+
+export interface RegressionsResponse {
+  timelines: FileTimeline[]
+  regressions: RegressionEvent[]
+}

@@ -13,6 +13,8 @@ export const ViolationTypeSchema = z.enum([
   'todo_comment',
   'missing_error_handling',
   'god_component',
+  'hallucinated_import',
+  'orphaned_export',
 ])
 
 export const ArchViolationSchema = z.object({

@@ -33,6 +33,8 @@ const ISSUE_SUMMARY: Record<string, (v: ArchViolation) => string> = {
   file_too_large:         (v) => `${cleanMessage(v.message)} — ${v.suggestion}`,
   mixed_responsibilities: (v) => `${cleanMessage(v.message)} — ${v.suggestion}`,
   todo_comment:           (v) => `${cleanMessage(v.message)} — resolve this properly or delete it`,
+  hallucinated_import:    (v) => `${cleanMessage(v.message)} — ${v.suggestion}`,
+  orphaned_export:        (v) => `${cleanMessage(v.message)} — ${v.suggestion}`,
 }
 
 function buildClaudePrompt(violation: ArchViolation, filePath: string): string {

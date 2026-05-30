@@ -1,4 +1,4 @@
-import type { Session, SessionGraph } from './types.js'
+import type { Session, SessionGraph, ReportCard, RegressionsResponse } from './types.js'
 
 const BASE = '/api'
 
@@ -26,6 +26,8 @@ export const api = {
   sessions: {
     list: () => get<Session[]>('/sessions'),
     graph: (id: string) => get<SessionGraph>(`/sessions/${id}/graph`),
+    report: (id: string) => get<ReportCard>(`/sessions/${id}/report`),
+    regressions: (id: string) => get<RegressionsResponse>(`/sessions/${id}/regressions`),
   },
   replay: (sessionId: string, nodeId: string, body: { rule: string; prompt: string }) =>
     post<ReplayResponse>(`/sessions/${sessionId}/nodes/${nodeId}/replay`, body),

@@ -13,6 +13,8 @@ const PENALTY: Record<string, number> = {
   todo_comment: 2,
   missing_error_handling: 6,
   god_component: 12,
+  hallucinated_import: 25,
+  orphaned_export: 8,
 }
 
 const SEVERITY_MULTIPLIER: Record<string, number> = {

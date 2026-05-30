@@ -10,6 +10,8 @@ import { checkDeepNesting } from '../rules/deep-nesting.js'
 import { checkTodoComments } from '../rules/todo-comments.js'
 import { checkMissingErrorHandling } from '../rules/missing-error-handling.js'
 import { checkGodComponent } from '../rules/god-component.js'
+import { checkHallucinatedImports } from '../rules/hallucinated-imports.js'
+import { checkOrphanedExports } from '../rules/orphaned-exports.js'
 import { computeScore } from './score.js'
 import type { FileMetrics, QualityMetrics } from '@keelcode/core'
 
@@ -70,6 +72,8 @@ function analyzeFile(filePath: string, projectRoot: string): FileMetrics | null 
         ...checkTodoComments(sourceFile, projectRoot),
         ...checkMissingErrorHandling(sourceFile, projectRoot),
         ...checkGodComponent(sourceFile, projectRoot),
+        ...checkHallucinatedImports(sourceFile, projectRoot),
+        ...checkOrphanedExports(sourceFile, projectRoot),
       ].filter((v): v is NonNullable<typeof v> => v !== null),
     }
   } catch {
