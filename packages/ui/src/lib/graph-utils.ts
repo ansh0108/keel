@@ -3,11 +3,6 @@ import type { GraphNode } from './types.js'
 import { scoreColor } from '../styles/tokens.js'
 
 export { scoreColor }
-export { severityColor } from '../styles/tokens.js'
-
-export function scoreToColor(score: number | null): string {
-  return scoreColor(score)
-}
 
 export function isScanSession(nodes: GraphNode[]): boolean {
   const nonRoot = nodes.filter((n) => n.parentId !== null)
@@ -27,7 +22,7 @@ export function computeScanStats(nodes: GraphNode[]) {
 }
 
 const BRANCH_COLORS = ['#6c8aff', '#0ea5e9', '#f59e0b', '#ec4899', '#14b8a6']
-export function branchColor(branchId: string): string {
+function branchColor(branchId: string): string {
   if (branchId === 'main' || branchId === 'baseline') return '#4e6285'
   let hash = 0
   for (let i = 0; i < branchId.length; i++) hash = (hash * 31 + branchId.charCodeAt(i)) >>> 0

@@ -29,7 +29,7 @@ export function estimateTokens(text: string): number {
   }
 }
 
-export function estimateCost(inputTokens: number, outputTokens: number, model = DEFAULT_MODEL): number {
+function estimateCost(inputTokens: number, outputTokens: number, model = DEFAULT_MODEL): number {
   const pricing = PRICING[model] ?? PRICING[DEFAULT_MODEL] ?? { inputPer1K: 0.005, outputPer1K: 0.015 }
   return (inputTokens / 1000) * pricing.inputPer1K + (outputTokens / 1000) * pricing.outputPer1K
 }

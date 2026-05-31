@@ -8,7 +8,7 @@ const MAX_SOURCE_CHARS = 60_000
 const MAX_TOKENS = 1500
 const SOURCE_RE = /\.(ts|tsx|js|jsx|mts|cts)$/
 
-export type SemanticSeverity = 'error' | 'warning' | 'info'
+type SemanticSeverity = 'error' | 'warning' | 'info'
 
 export interface SemanticFinding {
   severity: SemanticSeverity

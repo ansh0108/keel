@@ -88,9 +88,6 @@ importers:
       '@keelcode/core':
         specifier: workspace:*
         version: link:../core
-      '@keelcode/recorder':
-        specifier: workspace:*
-        version: link:../recorder
       hono:
         specifier: ^4.3.0
         version: 4.12.14

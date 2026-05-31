@@ -21,7 +21,7 @@ function text(body: string): TextResult {
  * Builds the Keel MCP server. `cwd` is the directory paths are resolved against
  * (the workspace root when launched by an MCP client).
  */
-export function buildServer(cwd: string): McpServer {
+function buildServer(cwd: string): McpServer {
   const server = new McpServer({ name: 'keel', version: '0.1.0' })
 
   server.registerTool(

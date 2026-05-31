@@ -15,7 +15,6 @@
     "@hono/node-server": "^1.11.0",
     "hono": "^4.3.0",
     "zod": "^3.22.0",
-    "@keelcode/recorder": "workspace:*",
     "@keelcode/analyzer": "file:../analyzer"
   }
 }

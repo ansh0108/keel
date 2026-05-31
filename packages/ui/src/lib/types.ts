@@ -7,7 +7,7 @@ export interface ArchViolation {
   suggestion: string
 }
 
-export interface FileMetrics {
+interface FileMetrics {
   path: string
   lineCount: number
   responsibilities: string[]
@@ -15,7 +15,7 @@ export interface FileMetrics {
   violations: ArchViolation[]
 }
 
-export interface NodeMetrics {
+interface NodeMetrics {
   id: string
   nodeId: string
   overallScore: number
@@ -23,7 +23,7 @@ export interface NodeMetrics {
   violations: ArchViolation[]
 }
 
-export interface FileChange {
+interface FileChange {
   path: string
   type: 'created' | 'modified' | 'deleted'
   lineCountBefore: number | null
@@ -43,7 +43,7 @@ export interface GraphNode {
   metrics: NodeMetrics | null
 }
 
-export interface Branch {
+interface Branch {
   id: string
   sessionId: string
   forkNodeId: string
@@ -90,7 +90,7 @@ export interface RegressionEvent {
   resolvedViolations: ArchViolation[]
 }
 
-export interface ScorePoint {
+interface ScorePoint {
   nodeId: string
   timestamp: number
   score: number

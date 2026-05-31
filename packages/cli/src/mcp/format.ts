@@ -1,7 +1,7 @@
 import type { ArchViolation } from '@keelcode/core'
 import type { ReviewResult, ScanSummary } from './analysis.js'
 
-export interface RuleInfo {
+interface RuleInfo {
   type: string
   penalty: number
   severity: 'error' | 'warning' | 'varies'
@@ -10,7 +10,7 @@ export interface RuleInfo {
 
 // Reference catalog of every rule Keel enforces. Kept in sync with the
 // analyzer's PENALTY map and rule set.
-export const RULES: RuleInfo[] = [
+const RULES: RuleInfo[] = [
   { type: 'hallucinated_import', penalty: 25, severity: 'error', catches: "Imports of packages neither declared in package.json nor present in node_modules — the signature of an AI-hallucinated dependency." },
   { type: 'god_object', penalty: 30, severity: 'error', catches: 'A class or module that concentrates too many responsibilities.' },
   { type: 'circular_dependency', penalty: 25, severity: 'error', catches: 'Modules that import each other directly or transitively.' },
