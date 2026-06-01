@@ -1,6 +1,6 @@
 {
   "name": "@ansh0108/keelcode",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "bin": {
     "keel": "dist/bin.js"
   },
