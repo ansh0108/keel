@@ -42,13 +42,17 @@ export function resetOrphanedExportsCache(): void {
 }
 
 /**
- * Flags exported symbols that are never referenced in any OTHER file in the
- * project — the signature of AI-generated code that was produced but never
- * wired up (orphaned helpers, dead components, unused types).
+ * Flags exported symbols that are never referenced anywhere in the project —
+ * the signature of AI-generated code that was produced but never wired up
+ * (orphaned helpers, dead components, unused types).
  *
- * Conservative by design: a symbol is only flagged when its name appears in
- * ZERO other source files. Any reference anywhere — even a coincidental
- * same-named identifier — suppresses the report, so false positives are rare.
+ * Conservative by design: a symbol is only flagged when its name appears in NO
+ * other source file AND is not used locally within its own file beyond its
+ * declaration. The local check matters because a type used only as the
+ * parameter or return type of an exported function (e.g. `getX(): XResult`) is
+ * public API by inference — consumers receive it without importing the name —
+ * so it is not dead code. Any reference anywhere, even a coincidental
+ * same-named identifier, suppresses the report, so false positives are rare.
  */
 export function checkOrphanedExports(sourceFile: SourceFile, projectRoot?: string): ArchViolation[] {
   if (!projectRoot) return []
@@ -72,7 +76,7 @@ export function checkOrphanedExports(sourceFile: SourceFile, projectRoot?: strin
   for (const { name, line } of exported) {
     if (seen.has(name)) continue
     seen.add(name)
-    if (isReferencedElsewhere(name, filePath, corpus)) continue
+    if (isReferenced(name, filePath, corpus)) continue
 
     violations.push({
       type: 'orphaned_export',
@@ -135,13 +139,26 @@ function collectExportedSymbols(sourceFile: SourceFile): ExportedSymbol[] {
   return symbols
 }
 
-function isReferencedElsewhere(name: string, declaringFile: string, corpus: SourceCorpus): boolean {
-  const re = new RegExp(`\\b${escapeRegExp(name)}\\b`)
+// A symbol is "referenced" if its name appears in any other source file, or if
+// it appears in its own file more than once — i.e. beyond the single
+// declaration site, indicating local use such as an exported function's
+// parameter or return type (public API by inference, not dead code).
+function isReferenced(name: string, declaringFile: string, corpus: SourceCorpus): boolean {
+  const escaped = escapeRegExp(name)
+  const testRe = new RegExp(`\\b${escaped}\\b`)
   for (const file of corpus.files) {
-    if (file.path === declaringFile) continue
-    if (re.test(file.text)) return true
+    if (file.path === declaringFile) {
+      if (countWordMatches(file.text, escaped) > 1) return true
+    } else if (testRe.test(file.text)) {
+      return true
+    }
   }
   return false
+}
+
+function countWordMatches(text: string, escapedName: string): number {
+  const matches = text.match(new RegExp(`\\b${escapedName}\\b`, 'g'))
+  return matches ? matches.length : 0
 }
 
 function loadCorpus(projectRoot: string): SourceCorpus {
