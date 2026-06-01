@@ -17,12 +17,16 @@ function text(body: string): TextResult {
   return { content: [{ type: 'text', text: body }] }
 }
 
+// Injected at build time by esbuild `define` (see build.mjs) from package.json.
+declare const __KEEL_VERSION__: string
+const VERSION = typeof __KEEL_VERSION__ === 'string' ? __KEEL_VERSION__ : '0.0.0-dev'
+
 /**
  * Builds the Keel MCP server. `cwd` is the directory paths are resolved against
  * (the workspace root when launched by an MCP client).
  */
 function buildServer(cwd: string): McpServer {
-  const server = new McpServer({ name: 'keel', version: '0.1.0' })
+  const server = new McpServer({ name: 'keel', version: VERSION })
 
   server.registerTool(
     'keel_review_file',

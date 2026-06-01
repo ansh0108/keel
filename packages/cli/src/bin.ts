@@ -11,12 +11,16 @@ import { runBlame } from './commands/blame.js'
 import { runReport } from './commands/report.js'
 import { runJudge } from './commands/judge.js'
 
+// Injected at build time by esbuild `define` (see build.mjs) from package.json.
+declare const __KEEL_VERSION__: string
+const VERSION = typeof __KEEL_VERSION__ === 'string' ? __KEEL_VERSION__ : '0.0.0-dev'
+
 const cwd = process.cwd()
 
 program
   .name('keel')
   .description('Causal debugger for AI-generated code quality')
-  .version('0.1.0')
+  .version(VERSION)
 
 program
   .command('init [path]')
