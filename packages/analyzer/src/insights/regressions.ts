@@ -140,10 +140,33 @@ export interface ViolationChurn {
   resolvedByType: Map<string, number>
 }
 
+// Latest timestamp at which each file was recorded as deleted, sourced from
+// nodes' files_changed. A deleted file has no analysis snapshot of its own (you
+// can't analyze a file that no longer exists), so deletions are tracked here
+// separately from the violation snapshots in `record.files`.
+function lastDeletionByFile(records: NodeAnalysisRecord[]): Map<string, number> {
+  const deletions = new Map<string, number>()
+  for (const record of records) {
+    for (const change of record.filesChanged) {
+      if (change.type !== 'deleted') continue
+      const prev = deletions.get(change.path)
+      if (prev === undefined || record.timestamp > prev) {
+        deletions.set(change.path, record.timestamp)
+      }
+    }
+  }
+  return deletions
+}
+
 // Total violations introduced and resolved across every consecutive snapshot of
 // every file — counting fixes (improvements) as well as regressions. Use this
 // for session-level tallies rather than the regression list, which only covers
 // score drops.
+//
+// Deleting a file also resolves its outstanding violations: removing dead code
+// is a fix, not a non-event. So a deleted file's last-known violations (from its
+// final snapshot before the deletion) are credited as resolved — unless the file
+// was recreated afterwards, in which case the later snapshots speak for it.
 export function buildViolationChurn(records: NodeAnalysisRecord[]): ViolationChurn {
   const byFile = groupByFile(records)
   const churn: ViolationChurn = {
@@ -167,6 +190,20 @@ export function buildViolationChurn(records: NodeAnalysisRecord[]): ViolationChu
       churn.resolvedCount += resolved.length
       for (const v of introduced) bump(churn.introducedByType, v.type)
       for (const v of resolved) bump(churn.resolvedByType, v.type)
+    }
+  }
+
+  const deletions = lastDeletionByFile(records)
+  for (const [path, deletedAt] of deletions) {
+    const snapshots = byFile.get(path)
+    if (!snapshots || snapshots.length === 0) continue
+    // A snapshot after the deletion means the file was recreated; its later
+    // snapshots already account for any remaining violations, so skip it.
+    if (snapshots.some((s) => s.record.timestamp > deletedAt)) continue
+    const last = snapshots[snapshots.length - 1]!
+    for (const v of last.file.violations) {
+      churn.resolvedCount += 1
+      bump(churn.resolvedByType, v.type)
     }
   }
 
