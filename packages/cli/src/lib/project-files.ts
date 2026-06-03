@@ -7,7 +7,10 @@ const EXCLUDED_DIRS = new Set([
   'out', '.cache', '__pycache__', '.venv',
 ])
 
-const SUPPORTED_EXTENSIONS = new Set(['.ts', '.tsx', '.js', '.jsx'])
+const SUPPORTED_EXTENSIONS = new Set([
+  '.ts', '.tsx', '.js', '.jsx', '.mts', '.cts', '.mjs', '.cjs',
+  '.py', '.pyi',
+])
 
 export function walkProjectFiles(projectRoot: string): string[] {
   const ignored = loadGitignorePatterns(projectRoot)

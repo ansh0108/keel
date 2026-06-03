@@ -25,6 +25,11 @@ const RULES: RuleInfo[] = [
   { type: 'too_many_imports', penalty: 5, severity: 'warning', catches: 'More than 12 imports in one file.' },
   { type: 'console_log', penalty: 3, severity: 'warning', catches: '`console.log` / `console.error` left in source.' },
   { type: 'todo_comment', penalty: 2, severity: 'warning', catches: 'TODO / FIXME / HACK comments.' },
+  // Python-specific
+  { type: 'bare_except', penalty: 8, severity: 'warning', catches: 'Python `except:` or `except Exception: pass` that swallows errors silently.' },
+  { type: 'mutable_default_arg', penalty: 8, severity: 'warning', catches: 'Python function with a mutable default argument (`def f(x=[])`), shared across calls.' },
+  { type: 'wildcard_import', penalty: 5, severity: 'warning', catches: 'Python `from module import *` that pollutes the namespace.' },
+  { type: 'print_statement', penalty: 3, severity: 'warning', catches: 'Leftover `print()` debugging statements in Python source.' },
 ]
 
 const SEVERITY_LABEL: Record<string, string> = { error: 'ERROR', warning: 'WARN' }
@@ -66,7 +71,7 @@ export function formatReviewBatch(results: ReviewResult[]): string {
 
 export function formatScan(summary: ScanSummary): string {
   if (summary.totalFiles === 0) {
-    return `No TypeScript/JavaScript files found under ${summary.root}.`
+    return `No supported source files (TypeScript/JavaScript/Python) found under ${summary.root}.`
   }
 
   const header = [

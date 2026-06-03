@@ -1,6 +1,6 @@
 # Keel
 
-Code quality analyzer for AI-generated TypeScript and JavaScript.
+Code quality analyzer for AI-generated TypeScript, JavaScript, and Python.
 
 Claude Code writes fast. Keel makes sure it writes well. Every file touched during a Claude session gets scored 0–100, violations are surfaced with fix prompts, and a visual UI lets you inspect exactly what changed and why.
 
@@ -12,7 +12,7 @@ It catches the things AI gets wrong: hallucinated imports, orphaned dead code, g
 
 1. `keel init` injects hooks into your project's `.claude/settings.json`
 2. Every Write, Edit, or Bash call Claude makes gets recorded automatically
-3. Each changed file is analyzed against 14 quality rules and scored
+3. Each changed file is analyzed against 18 quality rules (TS/JS and Python) and scored
 4. `keel ui` opens a local dashboard — browse files, see violations, copy fix prompts, rescan after fixing
 
 No CI, no cloud, no accounts. Everything runs locally.
@@ -64,11 +64,13 @@ After `keel init`, recording is automatic — just use Claude Code normally. Eve
 
 ## Quality rules
 
-Keel analyzes each file against 14 rules. Violations reduce the file's 0–100 score by the penalty shown (errors hurt more than warnings).
+Keel analyzes each file against 18 rules, routing by file extension: TypeScript/JavaScript files (`.ts/.tsx/.js/.jsx`) go through a ts-morph AST engine, Python files (`.py/.pyi`) through a dependency-free Python analyzer. Violations reduce the file's 0–100 score by the penalty shown (errors hurt more than warnings).
+
+### Shared & TypeScript/JavaScript
 
 | Rule | Penalty | What it catches |
 |------|:-------:|----------------|
-| `hallucinated_import` | 25 | Imports of packages neither declared in `package.json` nor present in `node_modules` — the signature of an AI-hallucinated dependency |
+| `hallucinated_import` | 25 | Imports of packages neither declared in the manifest nor installed — the signature of an AI-hallucinated dependency (works for both npm and pip) |
 | `god_object` | 30 | A class or module that concentrates too many responsibilities |
 | `circular_dependency` | 25 | Modules that import each other directly or transitively |
 | `business_logic_in_ui` | 20 | Data access or business rules embedded directly in UI components |
@@ -82,6 +84,17 @@ Keel analyzes each file against 14 rules. Violations reduce the file's 0–100 s
 | `too_many_imports` | 5 | More than 12 imports in one file |
 | `console_log` | 3 | `console.log` / `console.error` left in source |
 | `todo_comment` | 2 | TODO / FIXME / HACK comments |
+
+### Python-specific
+
+| Rule | Penalty | What it catches |
+|------|:-------:|----------------|
+| `bare_except` | 8 | `except:` or `except Exception: pass` that swallows errors silently |
+| `mutable_default_arg` | 8 | Mutable default argument (`def f(x=[])`) shared across every call |
+| `wildcard_import` | 5 | `from module import *` that pollutes the namespace |
+| `print_statement` | 3 | Leftover `print()` debugging statements |
+
+Several shared rules apply to Python too (`hallucinated_import` against `requirements.txt`/`pyproject.toml`, `file_too_large`, `long_function`, `deep_nesting`, `too_many_imports`, `god_object`, `todo_comment`).
 
 ---
 

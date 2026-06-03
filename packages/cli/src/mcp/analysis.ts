@@ -5,7 +5,8 @@ import { analyzeFiles, resetAnalyzerCaches } from '@keelcode/analyzer'
 import type { ArchViolation } from '@keelcode/core'
 import { walkProjectFiles } from '../lib/project-files.js'
 
-const SOURCE_RE = /\.(ts|tsx|js|jsx)$/
+const SOURCE_RE = /\.(ts|tsx|js|jsx|mts|cts|mjs|cjs|py|pyi)$/
+const ROOT_MARKERS = ['package.json', '.git', 'pyproject.toml', 'requirements.txt', 'setup.py', 'Pipfile']
 
 export interface ReviewResult {
   displayPath: string
@@ -36,7 +37,7 @@ export function resolveInputPath(input: string, cwd: string): string {
 export function findProjectRoot(fromFile: string, fallback: string): string {
   let cur = dirname(fromFile)
   while (true) {
-    if (existsSync(join(cur, 'package.json')) || existsSync(join(cur, '.git'))) return cur
+    if (ROOT_MARKERS.some((marker) => existsSync(join(cur, marker)))) return cur
     const parent = dirname(cur)
     if (parent === cur) return fallback
     cur = parent
@@ -54,7 +55,7 @@ function analyzeOne(absPath: string, projectRoot: string): ReviewResult {
     return { displayPath, absPath, analyzed: false, score: 0, violations: [], reason: 'file not found' }
   }
   if (!SOURCE_RE.test(absPath)) {
-    return { displayPath, absPath, analyzed: false, score: 0, violations: [], reason: 'unsupported file type (only .ts/.tsx/.js/.jsx)' }
+    return { displayPath, absPath, analyzed: false, score: 0, violations: [], reason: 'unsupported file type (supported: .ts/.tsx/.js/.jsx, .py/.pyi)' }
   }
 
   try {

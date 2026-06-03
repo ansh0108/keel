@@ -15,6 +15,11 @@ export const ViolationTypeSchema = z.enum([
   'god_component',
   'hallucinated_import',
   'orphaned_export',
+  // Python-specific
+  'bare_except',
+  'mutable_default_arg',
+  'print_statement',
+  'wildcard_import',
 ])
 
 export const ArchViolationSchema = z.object({

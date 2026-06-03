@@ -15,6 +15,11 @@ const PENALTY: Record<string, number> = {
   god_component: 12,
   hallucinated_import: 25,
   orphaned_export: 8,
+  // Python-specific
+  bare_except: 8,
+  mutable_default_arg: 8,
+  print_statement: 3,
+  wildcard_import: 5,
 }
 
 const SEVERITY_MULTIPLIER: Record<string, number> = {

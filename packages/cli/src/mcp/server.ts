@@ -33,7 +33,7 @@ function buildServer(cwd: string): McpServer {
     {
       title: 'Review a file with Keel',
       description:
-        'Analyze a single TypeScript/JavaScript file for AI-code-quality issues (hallucinated imports, dead exports, oversized files, missing error handling, and more) and return its 0–100 score with line-level fixes. Call this right after writing or editing a file to self-correct before moving on.',
+        'Analyze a single TypeScript/JavaScript or Python file for AI-code-quality issues (hallucinated imports, dead exports, oversized files, bare excepts, mutable default args, and more) and return its 0–100 score with line-level fixes. Call this right after writing or editing a file to self-correct before moving on.',
       inputSchema: {
         path: z.string().describe('Path to the file to review (absolute, or relative to the workspace root).'),
       },
@@ -47,7 +47,7 @@ function buildServer(cwd: string): McpServer {
     {
       title: 'Review multiple files with Keel',
       description:
-        'Analyze several TypeScript/JavaScript files at once and return each one\'s Keel score and issues. Use after a multi-file change to verify the whole edit before finishing.',
+        'Analyze several TypeScript/JavaScript or Python files at once and return each one\'s Keel score and issues. Use after a multi-file change to verify the whole edit before finishing.',
       inputSchema: {
         paths: z.array(z.string()).min(1).describe('Paths to review (absolute or relative to the workspace root).'),
       },

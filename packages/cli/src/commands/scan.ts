@@ -13,7 +13,7 @@ export function runScan(projectRoot: string): void {
 
   const files = walkProjectFiles(projectRoot)
   if (files.length === 0) {
-    console.log('No TypeScript/JavaScript files found.')
+    console.log('No supported source files (TypeScript/JavaScript/Python) found.')
     return
   }
 

@@ -13,7 +13,10 @@ import { checkGodComponent } from '../rules/god-component.js'
 import { checkHallucinatedImports } from '../rules/hallucinated-imports.js'
 import { checkOrphanedExports } from '../rules/orphaned-exports.js'
 import { computeScore } from './score.js'
+import { analyzePythonFile, PYTHON_EXTENSIONS } from '../python/analyze.js'
 import type { FileMetrics, QualityMetrics } from '@keelcode/core'
+
+const TS_EXTENSIONS = /\.(ts|tsx|js|jsx|mts|cts|mjs|cjs)$/
 
 export function analyzeFiles(
   nodeId: string,
@@ -23,8 +26,11 @@ export function analyzeFiles(
   const fileMetrics: FileMetrics[] = []
 
   for (const filePath of filePaths) {
-    if (!filePath.match(/\.(ts|tsx|js|jsx)$/)) continue
-    const metrics = analyzeFile(filePath, projectRoot)
+    const metrics = PYTHON_EXTENSIONS.test(filePath)
+      ? analyzePythonFile(filePath, projectRoot)
+      : TS_EXTENSIONS.test(filePath)
+        ? analyzeFile(filePath, projectRoot)
+        : null
     if (metrics) fileMetrics.push(metrics)
   }
 
