@@ -1,6 +1,6 @@
 # Keel
 
-**Code quality analyzer for AI-generated TypeScript and JavaScript.**
+**Code quality analyzer for AI-generated TypeScript, JavaScript, and Python.**
 
 Claude Code writes fast. Keel makes sure it writes well.
 
@@ -25,7 +25,7 @@ Requires **Node 18+** and [Claude Code](https://claude.ai/code).
 cd my-project
 keel init
 
-# 2. Baseline scan of all existing TS/JS files
+# 2. Baseline scan of all existing TS/JS/Python files
 keel scan
 
 # 3. Open the dashboard
@@ -44,7 +44,7 @@ Claude Code  →  hook event  →  keel record  →  analyzer  →  SQLite  → 
 
 1. `keel init` injects hooks into your project's `.claude/settings.json`
 2. Every `Write`, `Edit`, or `Bash` call Claude makes fires the hook automatically
-3. Each changed file is scored against 9 quality rules
+3. Each changed file is scored against the quality rules for its language (TS/JS or Python)
 4. `keel ui` opens a local dashboard at `localhost:2701`
 
 No CI, no cloud, no accounts. Everything stays on your machine.
@@ -56,7 +56,7 @@ No CI, no cloud, no accounts. Everything stays on your machine.
 | Command | What it does |
 |---|---|
 | `keel init` | Injects Claude Code hooks, registers the MCP server, creates `.keel/` dir |
-| `keel scan` | One-shot baseline scan of all TS/JS files |
+| `keel scan` | One-shot baseline scan of all TS/JS/Python files |
 | `keel ui` | Starts the dashboard at `localhost:2701` |
 | `keel mcp` | Runs Keel as an MCP server (stdio) for live, in-session code review |
 | `keel report [session]` | Agent report card for a session — grade, score trajectory, what broke vs. what got fixed |
@@ -97,7 +97,10 @@ Now Claude can write a file, call `keel_review_file` on it, and fix any hallucin
 
 ## Quality rules
 
-Eleven rules analyzed on every file:
+Keel routes each file to its language's rule set by extension. Both languages share a
+structural core; each adds checks for the failure modes specific to it.
+
+**TypeScript / JavaScript** (`.ts` `.tsx` `.js` `.jsx`):
 
 | Rule | What it catches |
 |---|---|
@@ -111,7 +114,23 @@ Eleven rules analyzed on every file:
 | `mixed_responsibilities` | Files mixing UI, data fetching, and business logic |
 | `god_component` | React components doing too many things |
 | `hallucinated_import` | Imports of packages not installed or listed in `package.json` (likely AI-hallucinated) |
-| `orphaned_export` | Exported symbols never imported anywhere else in the project (likely AI-generated dead code) |
+| `orphaned_export` | Exported symbols never imported anywhere else (likely AI-generated dead code) |
+
+**Python** (`.py` `.pyi`):
+
+| Rule | What it catches |
+|---|---|
+| `file_too_large` | Files over 300 lines |
+| `long_function` | Functions over 50 lines |
+| `deep_nesting` | Indentation nested over 4 levels |
+| `too_many_imports` | More than 12 imports |
+| `god_object` | Classes with too many methods |
+| `todo_comment` | TODO / FIXME / HACK / XXX comments |
+| `hallucinated_import` | Imports not in the stdlib, any dependency manifest, or the local project (likely AI-hallucinated) |
+| `bare_except` | `except:` (or `except Exception: pass`) that swallows errors silently |
+| `mutable_default_arg` | `def f(x=[])` — a default mutable shared across calls |
+| `print_statement` | Leftover `print()` debugging statements |
+| `wildcard_import` | `from module import *` namespace pollution |
 
 Each file gets an **overall score from 0–100**. Errors lower the score more than warnings.
 
